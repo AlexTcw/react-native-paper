@@ -7,13 +7,16 @@ import LoginForm from "../components/Auth/LoginForm";
 
 export default function Auth() {
     const [showLogin, setShowLogin] = useState(false);
+    const changeForm = ()=>setShowLogin(!showLogin)
     return (
         <View style={layoutStyles.container}>
             <Image
                 source={logo}
                 style={layoutStyles.logo}
             />
-            {showLogin ? <LoginForm/> : <RegisterForm/>}
+            {showLogin ?
+                <LoginForm changeForm={changeForm}/> :
+                <RegisterForm changeForm={changeForm} />}
         </View>
     );
 }
