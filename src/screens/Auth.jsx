@@ -1,22 +1,23 @@
+import {Image, View} from 'react-native';
 import React, {useState} from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native'; // Importar Image de 'react-native'
-import { layoutStyles } from "../styles/index";
-import logo from "../../assets/icon.png";
-import RegisterForm from "../components/Auth/RegisterForm";
-import LoginForm from "../components/Auth/LoginForm";
+import {layoutStyles} from '../styles/index';
+import ZeldaIcon from '../../assets/ZeldaIcon.jpg';
+import RegisterForm from '../components/Auth/RegisterForm';
+import LoginForm from '../components/Auth/LoginForm';
 
 export default function Auth() {
-    const [showLogin, setShowLogin] = useState(false);
-    const changeForm = ()=>setShowLogin(!showLogin)
+    const [showLogin, setShowLogin] = useState(false)
+    const changeForm = () => setShowLogin(!showLogin)
+
     return (
         <View style={layoutStyles.container}>
             <Image
-                source={logo}
+                source={ZeldaIcon}
                 style={layoutStyles.logo}
             />
             {showLogin ?
                 <LoginForm changeForm={changeForm}/> :
-                <RegisterForm changeForm={changeForm} />}
+                <RegisterForm changeForm={changeForm}/>}
         </View>
     );
 }

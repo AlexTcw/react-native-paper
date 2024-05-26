@@ -1,19 +1,19 @@
-import {StyleSheet, Text, View} from "react-native";
-import {Button} from "react-native-paper";
-import React from "react";
-
+import {Text, View} from 'react-native';
+import React from 'react';
 
 export default function Test() {
-    return(
+    return (
         <View>
-            <Text>Componente Test</Text>
+            <Text>Component test</Text>
             <Button
-                icon={"camera"}  mode={"contained"}
-                onPress={()=>console.log("pressed")}
-                title={"Press me"}>Press me
+                icon="camera"
+                mode="contained"
+                onPress={() => console.log('Pressed')}>
+                Press me
             </Button>
+
         </View>
-    )
+    );
 }
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create();
