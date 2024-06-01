@@ -1,12 +1,14 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import {Button} from "react-native-paper";
 
-export default function Logout() {
+export default function Logout({authData}) {
+
+    console.log("hola")
 
 return (
   <View style={styles.container}>
-     <Text>Zona de Usuarios</Text>
-     <button title='cerrar sesión' onPress={authData.Logout}></button>
+     <Button mode="contained" title='cerrar sesión' onPress={authData.logout}>Cerrar session</Button>
   </View>
 )
 

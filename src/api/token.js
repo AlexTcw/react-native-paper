@@ -41,3 +41,12 @@ export const getData = async () => {
         return null;
     }
 };
+
+export const removeTokenApi = async () => {
+    try {
+        await AsyncStorage.removeItem(TOKEN);
+        return true;
+    } catch (e) {
+        return null;
+    }
+};

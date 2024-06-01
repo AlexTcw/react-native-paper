@@ -34,5 +34,9 @@ yarn-error.*
 #idee
 .idea/
 
+#yarn
+yarn.lock
+
+
 # typescript
 *.tsbuildinfo
