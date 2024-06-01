@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput } from 'react-native';
-import { Button, Card, Title, Paragraph } from 'react-native-paper'; // Importa los componentes de React Native Paper
+import { View } from 'react-native';
+import { Button, Title } from 'react-native-paper';
 import { publishPost, recoverData } from "../../api/posts";
-import { API_URL } from "../../utils/constants";
 import { log } from "expo/build/devtools/logger";
+import FormComponent from "../CRUD-Posts/Form";
+import PostListComponent from "../CRUD-Posts/posts";
 
 export default function Dashboard() {
     const [postData, setPostData] = useState(null);
@@ -47,46 +48,15 @@ export default function Dashboard() {
                 {showForm ? "Ver Posts" : "Crear Nuevo Post"}
             </Button>
             {showForm ? (
-                <Card style={{ marginTop: 10 }}>
-                    <Card.Content>
-                        <TextInput
-                            placeholder="Título"
-                            onChangeText={text => setTitulo(text)}
-                            value={titulo}
-                            style={{ marginBottom: 10 }}
-                        />
-                        <TextInput
-                            placeholder="Mensaje"
-                            onChangeText={text => setMensaje(text)}
-                            value={mensaje}
-                            multiline
-                            style={{ marginBottom: 10 }}
-                        />
-                        <Button
-                            mode="contained"
-                            onPress={handleFormSubmit}
-                        >
-                            Publicar
-                        </Button>
-                    </Card.Content>
-                </Card>
+                <FormComponent
+                    titulo={titulo}
+                    setTitulo={setTitulo}
+                    mensaje={mensaje}
+                    setMensaje={setMensaje}
+                    handleFormSubmit={handleFormSubmit}
+                />
             ) : (
-                postData && postData.map((post, index) => (
-                    <Card key={index} style={{ marginTop: 10 }}>
-                        <Card.Content>
-                            <Title>{post.Titulo}</Title>
-                            <Paragraph>{post.Fecha}</Paragraph>
-                            <Paragraph>{post.Mensaje}</Paragraph>
-                            {post.Recursos && post.Recursos.map((recurso, idx) => (
-                                <Image
-                                    key={idx}
-                                    source={{ uri: `${API_URL}${recurso.url}` }}
-                                    style={{ width: 200, height: 200 }}
-                                />
-                            ))}
-                        </Card.Content>
-                    </Card>
-                ))
+                <PostListComponent postData={postData} />
             )}
         </View>
     );
