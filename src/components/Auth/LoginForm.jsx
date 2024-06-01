@@ -1,53 +1,45 @@
-import {StyleSheet, View} from 'react-native'
-import React from 'react'
-import {Button, TextInput} from 'react-native-paper'
-import {formStyles} from '../../styles'
-import {useFormik} from 'formik'
-import * as Yup from 'yup'
-import {loginApi} from '../../api/users'
-import useAuth from "../../hooks/useAuth";
+import { StyleSheet, View } from 'react-native';
+import React from 'react';
+import { Button, TextInput } from 'react-native-paper';
+import { formStyles } from '../../styles';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { loginApi } from '../../api/users';
+import useAuth from '../../hooks/useAuth';
 
-export default function LoginForm({changeForm}) {
-
-    const {login} = useAuth()
-    console.log(auth)
-    
+export default function LoginForm({ changeForm }) {
+    const { login } = useAuth();
 
     const formik = useFormik({
         initialValues: initialValues(),
-        validationSchema: Yup.object(validationSchema()),
+        validationSchema: Yup.object(validationSchema),
         onSubmit: async (formData) => {
-            console.log(formData);
             try {
-                const response = await loginApi(formData)
-                if(response.statusCode) throw 'Error'
-                //console.log(response)
-                //console.log(response.user.name)
-                login(response)
+                const response = await loginApi(formData);
+                if (response.statusCode) throw new Error('Error en la autenticación');
+                login(response);
             } catch (error) {
-                console.log(error)
+                console.error(error);
             }
-        }
+        },
     });
 
     function initialValues() {
         return {
-            identifier: "",
-            password: ""
-        }
+            identifier: '',
+            password: '',
+        };
     }
 
-    function validationSchema() {
-        return {
-            identifier: Yup.string().email().required(true),
-            password: Yup.string().required(true)
-        }
-    }
+    const validationSchema = {
+        identifier: Yup.string().email('Correo electrónico inválido').required('El correo es obligatorio'),
+        password: Yup.string().required('La contraseña es obligatoria'),
+    };
 
     return (
         <View>
             <TextInput
-                label="Correo electronico o Username"
+                label="Correo electrónico o Username"
                 style={formStyles.input}
                 onChangeText={(text) => formik.setFieldValue('identifier', text)}
                 value={formik.values.identifier}
@@ -64,18 +56,20 @@ export default function LoginForm({changeForm}) {
             <Button
                 mode="contained"
                 style={formStyles.btnSuccess}
-                onPress={formik.handleSubmit}>
-                Iniciar Sesion
+                onPress={formik.handleSubmit}
+            >
+                Iniciar Sesión
             </Button>
             <Button
                 mode="text"
                 style={formStyles.btnText}
                 labelStyle={formStyles.btnTextLabel}
-                onPress={changeForm}>
+                onPress={changeForm}
+            >
                 Registrarse
             </Button>
         </View>
-    )
+    );
 }
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});
