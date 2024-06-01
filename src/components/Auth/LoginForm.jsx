@@ -20,6 +20,7 @@ export default function LoginForm({changeForm}) {
             console.log(formData);
             try {
                 const response = await loginApi(formData)
+                if(response.statusCode) throw 'Error'
                 //console.log(response)
                 //console.log(response.user.name)
                 login(response)
