@@ -11,17 +11,34 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.yourcompany.myapp",
+      "buildNumber": "1.0.0"
     },
     "android": {
+      "package": "com.yourcompany.myapp",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": []
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "description": "This is a sample description of my app.",
+    "extra": {
+      "eas": {
+        "projectId": "5302eb7d-2def-4ef1-85cf-2f027744537c"
+      }
     }
   }
 }

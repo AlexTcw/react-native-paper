@@ -59,9 +59,16 @@ export default function App() {
     return (
         <AuthContext.Provider value={authData}>
             <PaperProvider>
-                {authData.auth ? <Dashboard /> : <Auth />}
+                {authData.auth ? (
+                    <>
+                        <Dashboard />
+                        <Logout authData={authData} />
+                    </>
+                ) : (
+                    <Auth />
+                )}
             </PaperProvider>
-            {authData.auth && <Logout authData={authData} />}
         </AuthContext.Provider>
     );
+
 }

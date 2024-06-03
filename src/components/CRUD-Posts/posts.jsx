@@ -2,12 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { View, Image, Alert } from 'react-native';
 import { Card, Title, Paragraph, Button } from 'react-native-paper';
 import { API_URL } from '../../utils/constants';
-import { deletePost } from "../../api/posts";
+import { deletePost, recoverData } from "../../api/posts";
 import EditPostComponent from './EditPostComponent'; // Importamos el componente de edición
-import { recoverData } from "../../api/posts"; // Importamos la función para recuperar los datos
 
 export default function PostListComponent({ postData }) {
-    const [posts, setPosts] = useState(postData);
+    const [posts, setPosts] = useState(postData || []);
     const [editingPost, setEditingPost] = useState(null); // Estado para controlar si se está editando un post
 
     useEffect(() => {
@@ -15,14 +14,19 @@ export default function PostListComponent({ postData }) {
     }, [postData]);
 
     const handleDelete = async (id) => {
-        const result = await deletePost(id);
-        if (result && result.message) {
-            Alert.alert('Success', result.message);
-            // Actualizar la lista de posts después de borrar uno con éxito
-            const updatedPosts = posts.filter(post => post.id !== id);
-            setPosts(updatedPosts);
-        } else {
+        try {
+            const result = await deletePost(id);
+            if (result && result.message) {
+                Alert.alert('Success', result.message);
+                // Actualizar la lista de posts después de borrar uno con éxito
+                const updatedPosts = posts.filter(post => post.id !== id);
+                setPosts(updatedPosts);
+            } else {
+                Alert.alert('Error', 'Failed to delete post');
+            }
+        } catch (error) {
             Alert.alert('Error', 'Failed to delete post');
+            console.error(error);
         }
     };
 
@@ -31,7 +35,6 @@ export default function PostListComponent({ postData }) {
     };
 
     const handleSaveEdit = (updatedPost) => {
-        // Guardar el post actualizado
         console.log('Guardando post actualizado:', updatedPost);
         // Aquí podrías llamar a una función para enviar los datos actualizados al servidor
         setEditingPost(null); // Finalizar la edición
@@ -43,12 +46,8 @@ export default function PostListComponent({ postData }) {
 
     const handleReload = async () => {
         try {
-            // Recuperar los datos actualizados de las publicaciones
             const updatedPosts = await recoverData();
-
-            // Verificar si se obtuvieron los datos correctamente
             if (updatedPosts) {
-                // Actualizar el estado de las publicaciones con los datos recuperados
                 setPosts(updatedPosts);
                 console.log("Datos recargados correctamente:", updatedPosts);
             } else {
@@ -64,9 +63,9 @@ export default function PostListComponent({ postData }) {
             <Button mode="contained" onPress={handleReload} style={{ marginBottom: 10, marginTop: 10 }}>
                 Recargar
             </Button>
-            {posts && posts.map((post, index) => (
+            {Array.isArray(posts) && posts.map((post, index) => (
                 <View key={index}>
-                    {editingPost === post ? ( // Mostrar el componente de edición si se está editando este post
+                    {editingPost === post ? (
                         <EditPostComponent
                             post={post}
                             onSave={handleSaveEdit}
