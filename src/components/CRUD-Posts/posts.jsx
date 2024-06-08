@@ -3,11 +3,11 @@ import { View, Image, Alert } from 'react-native';
 import { Card, Title, Paragraph, Button } from 'react-native-paper';
 import { API_URL } from '../../utils/constants';
 import { deletePost, recoverData } from "../../api/posts";
-import EditPostComponent from './EditPostComponent'; // Importamos el componente de edición
+import EditPost from './EditPost'; // Importamos el componente de edición
 
 export default function PostListComponent({ postData }) {
     const [posts, setPosts] = useState(postData || []);
-    const [editingPost, setEditingPost] = useState(null); // Estado para controlar si se está editando un post
+    const [editingPost, setEditingPost] = useState(null);
 
     useEffect(() => {
         setPosts(postData);
@@ -18,7 +18,7 @@ export default function PostListComponent({ postData }) {
             const result = await deletePost(id);
             if (result && result.message) {
                 Alert.alert('Success', result.message);
-                // Actualizar la lista de posts después de borrar uno con éxito
+
                 const updatedPosts = posts.filter(post => post.id !== id);
                 setPosts(updatedPosts);
             } else {
@@ -36,9 +36,19 @@ export default function PostListComponent({ postData }) {
 
     const handleSaveEdit = (updatedPost) => {
         console.log('Guardando post actualizado:', updatedPost);
-        // Aquí podrías llamar a una función para enviar los datos actualizados al servidor
-        setEditingPost(null); // Finalizar la edición
+
+        // Actualizar la lista de posts con el post editado
+        const updatedPosts = posts.map(post =>
+            post.id === updatedPost.id ? updatedPost : post
+        );
+
+        // Actualizar el estado de posts con la lista actualizada
+        setPosts(updatedPosts);
+
+        // Resetear el post en edición a null
+        setEditingPost(null);
     };
+
 
     const handleCancelEdit = () => {
         setEditingPost(null); // Cancelar la edición
@@ -60,13 +70,17 @@ export default function PostListComponent({ postData }) {
 
     return (
         <View>
-            <Button mode="contained" onPress={handleReload} style={{ marginBottom: 10, marginTop: 10 }}>
-                Recargar
+            <Button mode="contained" onPress={handleReload}
+                    style={{ marginBottom: 10, marginTop: 10 }}
+                    buttonColor="#ce7e00"
+                    textColor="#FFFFFF">
+
+                    Recargar
             </Button>
             {Array.isArray(posts) && posts.map((post, index) => (
                 <View key={index}>
                     {editingPost === post ? (
-                        <EditPostComponent
+                        <EditPost
                             post={post}
                             onSave={handleSaveEdit}
                             onCancel={handleCancelEdit}
@@ -84,12 +98,25 @@ export default function PostListComponent({ postData }) {
                                         style={{ width: 200, height: 200 }}
                                     />
                                 ))}
-                                <Button mode="contained" onPress={() => handleDelete(post.id)}>
-                                    Delete Post
+                                <Button
+                                    mode="contained"
+                                    onPress={() => handleDelete(post.id)}
+                                    style={{ marginTop: 10 }}
+                                    buttonColor="#e06666"
+                                    textColor="#FFFFFF"
+                                >
+                                    Borrar
                                 </Button>
-                                <Button mode="contained" onPress={() => handleUpdate(post)} style={{ marginTop: 10 }}>
+                                <Button
+                                    mode="contained"
+                                    onPress={() => handleUpdate(post)}
+                                    style={{ marginTop: 10 }}
+                                    buttonColor="#6fa8dc"
+                                    textColor="#FFFFFF"
+                                >
                                     Actualizar
                                 </Button>
+
                             </Card.Content>
                         </Card>
                     )}

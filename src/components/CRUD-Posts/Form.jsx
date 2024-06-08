@@ -22,6 +22,8 @@ export default function FormComponent({ titulo, setTitulo, mensaje, setMensaje, 
                 <Button
                     mode="contained"
                     onPress={handleFormSubmit}
+                    buttonColor="#93c47d"
+                    textColor="#000000"
                 >
                     Publicar
                 </Button>

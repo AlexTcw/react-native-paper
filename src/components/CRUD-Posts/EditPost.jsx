@@ -19,8 +19,16 @@ export default function EditPostComponent({ post, onSave, onCancel }) {
         const result = await updatePost(editedPost, editedPost.id);
         if (result && result.message) {
             onSave(editedPost);
-            Alert.alert('Éxito', 'El post ha sido actualizado exitosamente.');
-            onCancel(); // Llamar a onCancel después de completar el guardado
+            Alert.alert(
+                'Éxito',
+                'El post ha sido actualizado exitosamente.',
+                [
+                    {
+                        text: 'Cerrar',
+                        onPress: handleReturn
+                    }
+                ]
+            );
         } else {
             const errorMessage = result ? result.error : 'Error desconocido';
             setErrorMessage(errorMessage);
@@ -31,12 +39,7 @@ export default function EditPostComponent({ post, onSave, onCancel }) {
         onCancel(); // Llamar a la función onCancel al pulsar "Regresar"
     };
 
-    // Efecto para recargar el componente cuando la variable de estado 'reload' cambia
     useEffect(() => {
-        if (reload) {
-            setReload(false); // Reiniciar la variable de estado 'reload'
-            // Lógica para recargar el componente aquí...
-        }
     }, [reload]);
 
     return (
@@ -60,14 +63,20 @@ export default function EditPostComponent({ post, onSave, onCancel }) {
                 style={{ marginBottom: 10 }}
             />
             {errorMessage ? <Text style={{ color: 'red', marginBottom: 10 }}>{errorMessage}</Text> : null}
-            <Button mode="contained" onPress={handleSave} style={{ marginBottom: 10 }}>
+            <Button mode="contained" onPress={() => {
+                handleSave().then(handleReturn);
+            }}
+                    style={{ marginBottom: 10 }}
+                    buttonColor="#FAA009"
+                    textColor="#000000">
                 Guardar
             </Button>
-            <Button mode="contained" onPress={onCancel} style={{ marginBottom: 10 }}>
+
+            <Button mode="contained" onPress={handleReturn}
+                    style={{ marginBottom: 10 }}
+                    buttonColor="#3d85c6"
+                    textColor="#FFFFFF">
                 Cancelar
-            </Button>
-            <Button mode="contained" onPress={() => { handleReturn(); setReload(true); }} style={{ marginBottom: 10 }}>
-                Regresar
             </Button>
         </View>
     );

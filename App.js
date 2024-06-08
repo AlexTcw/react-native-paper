@@ -1,6 +1,6 @@
-import { Text } from 'react-native';
-import { PaperProvider } from 'react-native-paper';
 import React, { useEffect, useMemo, useState } from 'react';
+import { Text } from 'react-native';
+import { Provider as PaperProvider, DarkTheme } from 'react-native-paper';
 
 import Auth from './src/screens/Auth';
 import AuthContext from "./src/components/context/AuthContext";
@@ -58,7 +58,7 @@ export default function App() {
 
     return (
         <AuthContext.Provider value={authData}>
-            <PaperProvider>
+            <PaperProvider theme={DarkTheme}>
                 {authData.auth ? (
                     <>
                         <Dashboard />
